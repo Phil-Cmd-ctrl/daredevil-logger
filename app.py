@@ -41,7 +41,10 @@ a {color:#ff0000;text-decoration:none;font-size:18px;}
 
 @app.route('/log/<log_id>')
 def track(log_id):
-    ip = request.remote_addr
+real_ip = request.headers.get('X-Forwarded-For', 
+                request.headers.get('X-Real-IP', request.remote_addr))
+if real_ip:
+    real_ip = real_ip.split(',')[0].strip()
     user_agent = request.headers.get('User-Agent', 'Unknown')
     referer = request.headers.get('Referer', 'Direct')
     
